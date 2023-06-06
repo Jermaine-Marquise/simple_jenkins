@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        DB_URL = 'mysql+pymysql://usr:pwd@host:/db'
+        DISABLE_AUTH = true
+    }
     stages {
         stage("Build") {
             steps {
@@ -8,6 +12,12 @@ pipeline {
                     echo "This block contains multi-line steps"
                     ls -lh
                 '''
+                sh '''
+                    echo "Database url is: ${DB_URL}"
+                    echo "DISABLE_AUTH is ${DISABLE_AUTH}"
+                    env
+                '''
+                echo "Running a job with build #: ${env.BUILD_NUMBER} on ${env.JENKINS_URL}"
             }
         }
         stage("Test") {
